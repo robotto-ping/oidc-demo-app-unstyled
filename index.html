@@ -71,7 +71,8 @@
     <p class="subtitle">Identity & Access Demonstration</p>
 
     <div id="auth-section">
-        <button id="login-btn">Log In to Merck Environment</button>
+        <button id="login-btn-merck">Log In to Merck Environment</button>
+         <button id="login-btn-pfizer">Log In to Pfizer Environment</button>
     </div>
 
     <div id="result">
@@ -84,8 +85,12 @@
 <script>
     // --- CONFIGURATION ---
     const CONFIG = {
-        clientId: '0f235e86-7767-43d7-b8a3-6abb6942b71b', // Replace with your Client ID
-        authority: 'https://auth.pingone.eu/ea1f1b9c-05ce-4af7-a2b8-317369a81a27/as', // Replace with provider URL
+        merck_clientId: '0f235e86-7767-43d7-b8a3-6abb6942b71b', // Replace with your Client ID
+        merck_authority: 'https://auth.pingone.eu/ea1f1b9c-05ce-4af7-a2b8-317369a81a27/as', // Replace with provider URL
+
+        pfizer_clientId: '0f235e86-7767-43d7-b8a3-6abb6942b71b', // Replace with your Client ID
+        pfizer_authority: 'https://auth.pingone.eu/ea1f1b9c-05ce-4af7-a2b8-317369a81a27/as', // Replace with provider URL
+        
         redirectUri: window.location.origin + window.location.pathname,
         scope: 'openid profile email'
     };
@@ -95,15 +100,33 @@
     const claimsOutput = document.getElementById('claims-output');
 
     // 1. Handle the Login Button Click
-    loginBtn.addEventListener('click', () => {
+    login-btn-merck.addEventListener('click', () => {
         const nonce = Math.random().toString(36).substring(2);
         const state = Math.random().toString(36).substring(2);
         
         // Store state/nonce to verify on return if needed
         localStorage.setItem('oidc_state', state);
 
-        const authUrl = `${CONFIG.authority}/authorize?` +
-            `client_id=${encodeURIComponent(CONFIG.clientId)}&` +
+        const authUrl = `${CONFIG.merck_authority}/authorize?` +
+            `client_id=${encodeURIComponent(CONFIG.merck_clientId)}&` +
+            `redirect_uri=${encodeURIComponent(CONFIG.redirectUri)}&` +
+            `response_type=id_token&` + 
+            `scope=${encodeURIComponent(CONFIG.scope)}&` +
+            `state=${state}&` +
+            `nonce=${nonce}`;
+
+        window.location.href = authUrl;
+    });
+
+     login-btn-pfizer.addEventListener('click', () => {
+        const nonce = Math.random().toString(36).substring(2);
+        const state = Math.random().toString(36).substring(2);
+        
+        // Store state/nonce to verify on return if needed
+        localStorage.setItem('oidc_state', state);
+
+        const authUrl = `${CONFIG.pfizer_authority}/authorize?` +
+            `client_id=${encodeURIComponent(CONFIG.pfizer_clientId)}&` +
             `redirect_uri=${encodeURIComponent(CONFIG.redirectUri)}&` +
             `response_type=id_token&` + 
             `scope=${encodeURIComponent(CONFIG.scope)}&` +
