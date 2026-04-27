@@ -70,7 +70,7 @@
     <p class="subtitle">Identity & Access Demonstration</p>
 
     <div id="auth-section">
-        <button id="login-btn">Log In with OIDC</button>
+        <button id="login-btn">Log In to Merck EnvironmentC</button>
     </div>
 
     <div id="result">
@@ -83,8 +83,8 @@
 <script>
     // --- CONFIGURATION ---
     const CONFIG = {
-        clientId: 'YOUR_CLIENT_ID', // Replace with your Client ID
-        authority: 'https://your-oidc-provider.com', // Replace with provider URL
+        clientId: '0f235e86-7767-43d7-b8a3-6abb6942b71b', // Replace with your Client ID
+        authority: 'https://auth.pingone.eu/ea1f1b9c-05ce-4af7-a2b8-317369a81a27/as', // Replace with provider URL
         redirectUri: window.location.origin + window.location.pathname,
         scope: 'openid profile email'
     };
