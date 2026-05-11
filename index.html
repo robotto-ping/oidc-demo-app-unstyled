@@ -3,121 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumanity | OIDC Login Demo</title>
+    <title>OIDC Login Demo</title>
     <style>
+        /* Neutral Palette & Modern Reset */
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --primary: #2d3e50;
+            --primary-hover: #1e2a36;
+            --border-color: #dfe6e9;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f6da09;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            color: #081c49;
+            color: var(--text-main);
         }
+
         .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             text-align: center;
-            width: 100%;
-            max-width: 500px;
-            display: grid;
-    place-items: center;
+            width: 90%;
+            max-width: 450px;
+            border: 1px solid var(--border-color);
         }
+
         .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            background:  #081c49;
-            color: #081c49; /* Lumanity-inspired blue */
-    max-width: 300px;
-              padding: 12px;
-              margin: 12px;
+            margin-bottom: 1.5rem;
+            /* Optional: makes the logo blend with the neutral theme */
+            filter: grayscale(0.2); 
         }
+
+        .logo img {
+            max-width: 220px;
+            height: auto;
+        }
+
         .subtitle {
-            color: #666;
+            font-size: 1.1rem;
+            color: var(--text-muted);
             margin-bottom: 2rem;
+            font-weight: 400;
         }
-       .login-btn {
-            background-color: #081c49;
+
+        #auth-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .login-btn {
+            background-color: var(--primary);
             color: white;
             border: none;
-            padding: 12px;
-            font-size: 1rem;
-            border-radius: 4px;
+            padding: 14px 24px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background 0.3s;
-           margin: 12px;
-           
+            transition: all 0.2s ease;
+            width: 100%;
         }
+
         .login-btn:hover {
-            background-color: #003366;
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
         #result {
             display: none;
             text-align: left;
-            margin-top: 2rem;
-            background: #eee;
-            padding: 1rem;
-            border-radius: 4px;
-            overflow-x: auto;
+            margin-top: 1.5rem;
+            background: #f1f3f5;
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
         }
+
+        #result h3 {
+            margin-top: 0;
+            font-size: 1rem;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
         pre {
-            font-size: 0.85rem;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.8rem;
             white-space: pre-wrap;
             word-wrap: break-word;
+            color: #444;
+            line-height: 1.4;
+        }
+
+        .logout-btn {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            margin-top: 15px;
+        }
+
+        .logout-btn:hover {
+            background-color: #fff;
+            color: #e74c3c;
+            border-color: #e74c3c;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="logo"><img src="https://lumanity.com/wp-content/themes/lumanity/dist/img/logo.svg" /></div>
+    <div class="logo">
+       LOGO
+    </div>
     <p class="subtitle">Identity & Access Demonstration</p>
 
     <div id="auth-section">
-        <button id="login-btn-merck" class="login-btn">Log In to Merck Environment</button>
-
-        <br/>
-         <button id="login-btn-pfizer" class="login-btn">Log In to Pfizer Environment</button>
+        <button id="login-btn" class="login-btn">Log In</button>
     </div>
 
     <div id="result">
         <h3>ID Token Claims</h3>
         <pre id="claims-output"></pre>
-        <button class="login-btn" onclick="window.location.hash=''; location.reload();" style="margin-top:10px; cursor:pointer;">Clear / Logout</button>
+        <button class="login-btn logout-btn" onclick="window.location.hash=''; location.reload();">Clear / Logout</button>
     </div>
 </div>
 
 <script>
     // --- CONFIGURATION ---
     const CONFIG = {
-        merck_clientId: '0f235e86-7767-43d7-b8a3-6abb6942b71b', // Replace with your Client ID
-        merck_authority: 'https://auth.pingone.eu/ea1f1b9c-05ce-4af7-a2b8-317369a81a27/as', // Replace with provider URL
+        clientId: '<CID>', 
+        authority: 'https://auth.pingone.eu/<ENV>/as', 
 
-        pfizer_clientId: '7695c4bf-bb67-45f5-9d8f-e95ee5da7062', // Replace with your Client ID
-        pfizer_authority: 'https://auth.pingone.eu/1a0d7ce0-20e5-41db-9592-f2df967ae364/as', // Replace with provider URL
         
         redirectUri: window.location.origin + window.location.pathname,
         scope: 'openid profile email'
     };
 
-    const loginBtnMerck = document.getElementById('login-btn-merck');
-    const loginBtnPfizer = document.getElementById('login-btn-pfizer');
+    const loginBtnM = document.getElementById('login-btn');
     const resultDiv = document.getElementById('result');
     const claimsOutput = document.getElementById('claims-output');
 
-    // 1. Handle the Login Button Click
-    loginBtnMerck.addEventListener('click', () => {
+    loginBtn.addEventListener('click', () => {
+        initiateLogin(CONFIG.authority, CONFIG.clientId);
+    });
+
+
+    function initiateLogin(authority, clientId) {
         const nonce = Math.random().toString(36).substring(2);
         const state = Math.random().toString(36).substring(2);
-        
-        // Store state/nonce to verify on return if needed
         localStorage.setItem('oidc_state', state);
 
-        const authUrl = `${CONFIG.merck_authority}/authorize?` +
-            `client_id=${encodeURIComponent(CONFIG.merck_clientId)}&` +
+        const authUrl = `${authority}/authorize?` +
+            `client_id=${encodeURIComponent(clientId)}&` +
             `redirect_uri=${encodeURIComponent(CONFIG.redirectUri)}&` +
             `response_type=id_token&` + 
             `scope=${encodeURIComponent(CONFIG.scope)}&` +
@@ -125,43 +179,19 @@
             `nonce=${nonce}`;
 
         window.location.href = authUrl;
-    });
+    }
 
-     loginBtnPfizer.addEventListener('click', () => {
-        const nonce = Math.random().toString(36).substring(2);
-        const state = Math.random().toString(36).substring(2);
-        
-        // Store state/nonce to verify on return if needed
-        localStorage.setItem('oidc_state', state);
-
-        const authUrl = `${CONFIG.pfizer_authority}/authorize?` +
-            `client_id=${encodeURIComponent(CONFIG.pfizer_clientId)}&` +
-            `redirect_uri=${encodeURIComponent(CONFIG.redirectUri)}&` +
-            `response_type=id_token&` + 
-            `scope=${encodeURIComponent(CONFIG.scope)}&` +
-            `state=${state}&` +
-            `nonce=${nonce}`;
-
-        window.location.href = authUrl;
-    });
-
-    // 2. Process the Callback
     window.onload = () => {
         const hash = window.location.hash.substring(1);
         if (hash) {
             const params = new URLSearchParams(hash);
             const idToken = params.get('id_token');
-
-            if (idToken) {
-                decodeToken(idToken);
-            }
+            if (idToken) decodeToken(idToken);
         }
     };
 
-    // 3. Decode JWT (ID Token)
     function decodeToken(token) {
         try {
-            // A JWT is: Header.Payload.Signature
             const base64Url = token.split('.')[1];
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
             const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
@@ -169,14 +199,11 @@
             }).join(''));
 
             const claims = JSON.parse(jsonPayload);
-            
-            // UI Updates
             document.getElementById('auth-section').style.display = 'none';
             resultDiv.style.display = 'block';
             claimsOutput.textContent = JSON.stringify(claims, null, 4);
         } catch (e) {
             console.error("Token decoding failed", e);
-            alert("Error parsing the ID Token.");
         }
     }
 </script>
