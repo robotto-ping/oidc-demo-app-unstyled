@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OIDC Login Demo</title>
+    <title>Vodafone/3 OIDC Login Demo</title>
     <style>
         /* Neutral Palette & Modern Reset */
         :root {
@@ -14,17 +14,27 @@
             --primary: #2d3e50;
             --primary-hover: #1e2a36;
             --border-color: #dfe6e9;
+             --vf-red: #e60000;
+     --vf-red-dark: #a00000;
+     --vf-black: #1f1f1f;
+     --vf-grey: #666;
+     --vf-light-grey: #f2f2f2;
+     --vf-border: #d7d7d7;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
+  
+ 
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            color: var(--text-main);
+    
+
+     font-family: Arial, Helvetica, sans-serif;
+     background: var(--vf-light-grey);
+     color: var(--vf-black);
         }
 
         .container {
@@ -63,7 +73,7 @@
         }
 
         .login-btn {
-            background-color: var(--primary);
+            background-color: var(--vf-red);
             color: white;
             border: none;
             padding: 14px 24px;
@@ -76,7 +86,7 @@
         }
 
         .login-btn:hover {
-            background-color: var(--primary-hover);
+            background-color: var(--vf-red-dark);
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
@@ -130,7 +140,7 @@
 
 <div class="container">
     <div class="logo">
-       LOGO
+       <img src="https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/VodafoneThree_logo_%282025%29.svg/1280px-VodafoneThree_logo_%282025%29.svg.png"/>
     </div>
     <p class="subtitle">Identity & Access Demonstration</p>
 
